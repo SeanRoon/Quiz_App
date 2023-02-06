@@ -2,17 +2,18 @@ package com.example.quizapp
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.quizapp.databinding.FragmentMainBinding
 
 const val KEY_CURRENT_INDEX = "current_index_key"
+const val KEY_USER_CHEATED = "user_cheated_key"
 
 class MainFragment : Fragment() {
 
@@ -26,6 +27,7 @@ class MainFragment : Fragment() {
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
         savedInstanceState.putInt(KEY_CURRENT_INDEX, currentIndex)
+        savedInstanceState.putBoolean(KEY_USER_CHEATED, userCheated)
     }
 
     override fun onCreateView(
@@ -35,8 +37,10 @@ class MainFragment : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val rootView = binding.root
         Log.i("MainActivity", "onCreate Called")
-        if (savedInstanceState != null)
+        if (savedInstanceState != null) {
             currentIndex = savedInstanceState.getInt(KEY_CURRENT_INDEX)
+            userCheated = savedInstanceState.getBoolean(KEY_USER_CHEATED)
+        }
         binding.question.text = getString(myList[currentIndex].resourceId)
         binding.falseButton.setOnClickListener(){
             checkAnswer(false)
