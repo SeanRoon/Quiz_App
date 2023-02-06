@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.quizapp.databinding.FragmentMainBinding
 
 const val KEY_CURRENT_INDEX = "current_index_key"
@@ -20,6 +21,7 @@ class MainFragment : Fragment() {
     var currentIndex: Int = 0
     var userCheated: Boolean = false
     var numOfIncorrect: Int = 0
+    var numOfCorrect: Int = 0
     val myList: List<Question> = listOf(Question(R.string.question1, false), Question(R.string.question2, true), Question(R.string.question3, false), Question(R.string.question4, false), Question(R.string.question5, false))
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
@@ -65,6 +67,11 @@ class MainFragment : Fragment() {
             }
             else{
                 Toast.makeText(activity, R.string.correct, Toast.LENGTH_SHORT).show()
+                numOfCorrect++
+                if(numOfCorrect > 2){
+                    val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(numOfIncorrect)
+                    findNavController().navigate(action)
+                }
             }
         }
         else{

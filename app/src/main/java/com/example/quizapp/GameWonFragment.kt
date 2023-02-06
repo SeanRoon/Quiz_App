@@ -16,8 +16,15 @@ class GameWonFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_game_won, container, false)
+        _binding = FragmentGameWonBinding.inflate(inflater, container, false)
+        val rootView = binding.root
+        val args = GameWonFragmentArgs.fromBundle(requireArguments())
+        val numOfIncorrect = args.numOfIncorrect
+        binding.numOfWrongTextView.text = "You had ${numOfIncorrect} wrong answers"
+        return rootView
     }
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

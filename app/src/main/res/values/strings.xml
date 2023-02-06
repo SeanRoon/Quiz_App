@@ -15,6 +15,6 @@
     <string name="ask_user_if_they_want_to_cheat">Are you really sure you want to cheat?</string>
     <string name="show_answer_button">Show Answer</string>
     <string name="cheating_is_bad">Cheating is wrong</string>
+    <string name="win_text">You Won!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
-
