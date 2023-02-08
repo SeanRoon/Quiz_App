@@ -16,10 +16,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/cheat_text" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/cheat_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -40,5 +40,5 @@
         app:layout_constraintBottom_toTopOf="@+id/show_answer_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/cheat_text" />
 </androidx.constraintlayout.widget.ConstraintLayout>

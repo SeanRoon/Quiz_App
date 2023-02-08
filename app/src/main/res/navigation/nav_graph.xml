@@ -35,4 +35,8 @@
             android:name="numOfIncorrect"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.quizapp.AboutFragment"
+        android:label="AboutFragment" />
 </navigation>

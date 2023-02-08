@@ -2,14 +2,13 @@ package com.example.quizapp
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.example.quizapp.databinding.FragmentMainBinding
 
 const val KEY_CURRENT_INDEX = "current_index_key"
@@ -37,10 +36,6 @@ class MainFragment : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val rootView = binding.root
         Log.i("MainActivity", "onCreate Called")
-        if (savedInstanceState != null) {
-            currentIndex = savedInstanceState.getInt(KEY_CURRENT_INDEX)
-            userCheated = savedInstanceState.getBoolean(KEY_USER_CHEATED)
-        }
         binding.question.text = getString(myList[currentIndex].resourceId)
         binding.falseButton.setOnClickListener(){
             checkAnswer(false)
@@ -62,6 +57,7 @@ class MainFragment : Fragment() {
         setFragmentResultListener("REQUESTING_DID_CHEAT_KEY"){ requestKey: String, bundle: Bundle ->
             userCheated = bundle.getBoolean("DID_CHEAT_KEY")
         }
+        setHasOptionsMenu(true)
         return rootView
     }
     fun checkAnswer(guess: Boolean){
@@ -109,6 +105,15 @@ class MainFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.options_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return NavigationUI.onNavDestinationSelected(item, requireView().findNavController()) || super.onOptionsItemSelected(item)
     }
 }
 class Question(val resourceId: Int, val answer: Boolean){}

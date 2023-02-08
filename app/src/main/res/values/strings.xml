@@ -16,5 +16,6 @@
     <string name="show_answer_button">Show Answer</string>
     <string name="cheating_is_bad">Cheating is wrong</string>
     <string name="win_text">You Won!</string>
+    <string name="about_text">The Philadelphia Eagles are a professional American football team based in Philadelphia. The Eagles compete in the National Football League as a member club of the league\'s National Football Conference East division. The team plays its home games at Lincoln Financial Field in the South Philadelphia Sports Complex.</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
