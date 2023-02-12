@@ -1,5 +1,6 @@
 package com.example.quizapp
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ class GameWonFragment : Fragment() {
 
     private var _binding: FragmentGameWonBinding? = null
     private val binding get() = _binding!!
+    lateinit var mediaPlayer: MediaPlayer
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -22,6 +24,25 @@ class GameWonFragment : Fragment() {
         val numOfIncorrect = args.numOfIncorrect
         binding.numOfWrongTextView.text = "You had ${numOfIncorrect} wrong answers"
         setHasOptionsMenu(true)
+        mediaPlayer = MediaPlayer.create(context, R.raw.gamewon)
+        mediaPlayer.setLooping(true)
+        mediaPlayer.start()
+        binding.playPauseButton.setOnClickListener() {
+            if(mediaPlayer.isPlaying){
+                mediaPlayer.pause()
+                binding.playPauseButton.setImageResource(R.drawable.ic_baseline_play_arrow_24)
+            }
+            else{
+                mediaPlayer.start()
+                binding.playPauseButton.setImageResource(R.drawable.ic_baseline_pause_circle_outline_24)
+            }
+        }
+        binding.fastForwardButton.setOnClickListener(){
+            mediaPlayer.seekTo(mediaPlayer.currentPosition + 1000)
+        }
+        binding.rewindButton.setOnClickListener(){
+            mediaPlayer.seekTo(mediaPlayer.currentPosition - 1000)
+        }
         return rootView
     }
     override fun onDestroyView() {
@@ -35,5 +56,10 @@ class GameWonFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return NavigationUI.onNavDestinationSelected(item, requireView().findNavController()) || super.onOptionsItemSelected(item)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mediaPlayer.release()
     }
 }
