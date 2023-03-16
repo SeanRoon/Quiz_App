@@ -1,5 +1,6 @@
 package com.example.quizapp
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -18,11 +19,7 @@ class MainFragment : Fragment() {
 
     private var _binding : FragmentMainBinding? = null
     private val binding get() = _binding!!
-    var currentIndex: Int = 0
-    var userCheated: Boolean = false
-    var numOfIncorrect: Int = 0
-    var numOfCorrect: Int = 0
-    val myList: List<Question> = listOf(Question(R.string.question1, false), Question(R.string.question2, true), Question(R.string.question3, false), Question(R.string.question4, false), Question(R.string.question5, false))
+    lateinit var mediaPlayer: MediaPlayer
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
         savedInstanceState.putInt(KEY_CURRENT_INDEX, currentIndex)
@@ -68,6 +65,8 @@ class MainFragment : Fragment() {
             else{
                 Toast.makeText(activity, R.string.correct, Toast.LENGTH_SHORT).show()
                 numOfCorrect++
+                mediaPlayer = MediaPlayer.create(context, R.raw.correctsound)
+                mediaPlayer.start()
                 if(numOfCorrect > 2){
                     val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(numOfIncorrect)
                     findNavController().navigate(action)
@@ -77,6 +76,8 @@ class MainFragment : Fragment() {
         else{
             Toast.makeText(activity, R.string.incorrect, Toast.LENGTH_SHORT).show()
             numOfIncorrect++
+            mediaPlayer = MediaPlayer.create(context, R.raw.incorrectsound)
+            mediaPlayer.start()
         }
     }
     fun advanceScreen(){
@@ -116,4 +117,3 @@ class MainFragment : Fragment() {
         return NavigationUI.onNavDestinationSelected(item, requireView().findNavController()) || super.onOptionsItemSelected(item)
     }
 }
-class Question(val resourceId: Int, val answer: Boolean){}
