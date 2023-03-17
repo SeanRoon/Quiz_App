@@ -1,23 +1,29 @@
 package com.example.quizapp
 
+import android.media.MediaPlayer
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 
 class QuizViewModel: ViewModel() {
     val myList: List<Question> = listOf(Question(R.string.question1, false, false), Question(R.string.question2, true, false), Question(R.string.question3, false, false), Question(R.string.question4, false, false), Question(R.string.question5, false, false))
 
     //    figure out which on should be mutable
-    private var _currentIndex = MutableLiveData(0)
-    val currentIndex: MutableLiveData<Int>
+    var _currentIndex = MutableLiveData(0)
+    val currentIndex: LiveData<Int>
         get() = _currentIndex
-    private var numOfIncorrect = 0
+    var numOfIncorrect = 0
         get() = numOfIncorrect
-    private var numOfCorrect = 0
+    var numOfCorrect = 0
         get() = numOfCorrect
-    private var _gameWon = MutableLiveData(0)
-    val gameWon: MutableLiveData<Int>
+    var _gameWon = MutableLiveData(false)
+    val gameWon: LiveData<Boolean>
         get() = gameWon
+    lateinit var mediaPlayer: MediaPlayer
+
 
     val currentQuestionAnswer: Boolean
         get() = myList[currentIndex.value ?: 0].answer
@@ -30,8 +36,21 @@ class QuizViewModel: ViewModel() {
         myList.get(currentIndex.value ?: 0).cheated = cheated
     }
     fun checkIfGameWon(){
-        if(numOfCorrect >= 3)
-            _gameWon = true
+        _gameWon.value = numOfCorrect >= 3
     }
-
+    fun checkAnswer(guess: Boolean){
+        if(myList[currentIndex.value ?: 0].answer == guess){
+            if(!(currentQuestionCheatStatus)){
+                numOfCorrect++
+                mediaPlayer = MediaPlayer.create(context, R.raw.correctsound)
+                mediaPlayer.start()
+            }
+        }
+        else{
+            Toast.makeText(activity, R.string.incorrect, Toast.LENGTH_SHORT).show()
+            numOfIncorrect++
+            mediaPlayer = MediaPlayer.create(context, R.raw.incorrectsound)
+            mediaPlayer.start()
+        }
+    }
 }

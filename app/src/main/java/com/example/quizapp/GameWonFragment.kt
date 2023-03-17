@@ -8,6 +8,7 @@ import androidx.navigation.ui.NavigationUI
 import com.example.quizapp.databinding.FragmentCheatBinding
 import com.example.quizapp.databinding.FragmentGameWonBinding
 import android.media.MediaPlayer
+import androidx.fragment.app.activityViewModels
 
 
 class GameWonFragment : androidx.fragment.app.Fragment() {
@@ -15,6 +16,7 @@ class GameWonFragment : androidx.fragment.app.Fragment() {
     private var _binding: FragmentGameWonBinding? = null
     private val binding get() = _binding!!
     lateinit var mediaPlayer: MediaPlayer
+    private val viewModel: QuizViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

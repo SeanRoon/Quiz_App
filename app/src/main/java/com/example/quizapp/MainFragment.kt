@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -19,7 +21,7 @@ class MainFragment : Fragment() {
 
     private var _binding : FragmentMainBinding? = null
     private val binding get() = _binding!!
-    lateinit var mediaPlayer: MediaPlayer
+    private val viewModel: QuizViewModel by activityViewModels()
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
         savedInstanceState.putInt(KEY_CURRENT_INDEX, currentIndex)
@@ -58,16 +60,13 @@ class MainFragment : Fragment() {
         return rootView
     }
     fun checkAnswer(guess: Boolean){
-        if(myList[currentIndex].answer == guess){
+        if(viewModel.myList[currentIndex].answer == guess){
             if(userCheated){
                 Toast.makeText(activity, R.string.cheating_is_bad, Toast.LENGTH_SHORT).show()
             }
             else{
                 Toast.makeText(activity, R.string.correct, Toast.LENGTH_SHORT).show()
-                numOfCorrect++
-                mediaPlayer = MediaPlayer.create(context, R.raw.correctsound)
-                mediaPlayer.start()
-                if(numOfCorrect > 2){
+                if(viewModel.numOfCorrect > 2){
                     val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(numOfIncorrect)
                     findNavController().navigate(action)
                 }
@@ -75,9 +74,6 @@ class MainFragment : Fragment() {
         }
         else{
             Toast.makeText(activity, R.string.incorrect, Toast.LENGTH_SHORT).show()
-            numOfIncorrect++
-            mediaPlayer = MediaPlayer.create(context, R.raw.incorrectsound)
-            mediaPlayer.start()
         }
     }
     fun advanceScreen(){
