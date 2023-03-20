@@ -37,8 +37,8 @@ class QuizViewModel: ViewModel() {
     fun setCheatedStatusForCurrentQuestion(cheated: Boolean){
         myList.get(currentIndex.value ?: 0).cheated = cheated
     }
-    fun checkIfGameWon(){
-        _gameWon.value = numOfCorrect >= 3
+    fun checkIfGameWon(): Boolean{
+        return _gameWon.value == numOfCorrect >= 3
     }
     fun checkAnswer(guess: Boolean): Boolean {
         if(myList[_currentIndex.value ?: 0].answer == guess){
@@ -49,7 +49,7 @@ class QuizViewModel: ViewModel() {
         else{
             _numOfIncorrect++
         }
-        checkIfGameWon()
+//        checkIfGameWon()
         return (myList[_currentIndex.value ?: 0].answer == guess)
     }
     fun advanceScreen(){

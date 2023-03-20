@@ -67,7 +67,7 @@ class MainFragment : Fragment() {
                 mediaPlayer = MediaPlayer.create(context, R.raw.incorrectsound)
                 mediaPlayer.start()
                 viewModel.gameWon.observe(viewLifecycleOwner) {
-                    if (viewModel.isGameWon) {
+                    if (viewModel.checkIfGameWon()) {
                         val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(viewModel.numOfIncorrect)
                         findNavController().navigate(action)
                     }
