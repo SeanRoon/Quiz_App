@@ -32,15 +32,15 @@ class QuizViewModel: ViewModel() {
     val currentQuestionCheatStatus: Boolean
         get() = myList[currentIndex.value ?: 0].cheated
     val isGameWon: Boolean
-        get() = ((gameWon.value ?: 0) as Boolean)
+        get() = _gameWon.value!!
 
     fun setCheatedStatusForCurrentQuestion(cheated: Boolean){
         myList.get(currentIndex.value ?: 0).cheated = cheated
     }
     fun checkIfGameWon(){
-        _gameWon.value = numOfCorrect > 1
+        _gameWon.value = numOfCorrect >= 3
     }
-    fun checkAnswer(guess: Boolean){
+    fun checkAnswer(guess: Boolean): Boolean {
         if(myList[_currentIndex.value ?: 0].answer == guess){
             if(!(currentQuestionCheatStatus)){
                 _numOfCorrect++
@@ -50,6 +50,7 @@ class QuizViewModel: ViewModel() {
             _numOfIncorrect++
         }
         checkIfGameWon()
+        return (myList[_currentIndex.value ?: 0].answer == guess)
     }
     fun advanceScreen(){
         if(currentIndex.value!! < myList.size - 1) {
@@ -58,6 +59,5 @@ class QuizViewModel: ViewModel() {
         else{
             _currentIndex.value = 0
         }
-//        setCheatedStatusForCurrentQuestion(false)
     }
 }

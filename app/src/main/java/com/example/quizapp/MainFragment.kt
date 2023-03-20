@@ -30,7 +30,9 @@ class MainFragment : Fragment() {
     ): View? {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val rootView = binding.root
-        Log.i("MainActivity", "onCreate Called")
+        viewModel.currentIndex.observe(viewLifecycleOwner){
+            binding.question.text = getString(viewModel.currentQuestionText)
+        }
         binding.question.text = getString(viewModel.currentQuestionText)
         binding.falseButton.setOnClickListener(){
             checkAnswer(false)
@@ -54,7 +56,7 @@ class MainFragment : Fragment() {
         return rootView
     }
     fun checkAnswer(guess: Boolean){
-        if(viewModel.currentQuestionAnswer == guess){
+        if(viewModel.checkAnswer(guess)){
             if(viewModel.currentQuestionCheatStatus){
                 Toast.makeText(activity, R.string.cheating_is_bad, Toast.LENGTH_SHORT).show()
                 mediaPlayer = MediaPlayer.create(context, R.raw.correctsound)
@@ -64,16 +66,17 @@ class MainFragment : Fragment() {
                 Toast.makeText(activity, R.string.correct, Toast.LENGTH_SHORT).show()
                 mediaPlayer = MediaPlayer.create(context, R.raw.incorrectsound)
                 mediaPlayer.start()
-                if(viewModel.isGameWon){
-                    val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(viewModel.numOfIncorrect)
-                    findNavController().navigate(action)
+                viewModel.gameWon.observe(viewLifecycleOwner) {
+                    if (viewModel.isGameWon) {
+                        val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(viewModel.numOfIncorrect)
+                        findNavController().navigate(action)
+                    }
                 }
             }
         }
         else{
             Toast.makeText(activity, R.string.incorrect, Toast.LENGTH_SHORT).show()
         }
-        viewModel.checkAnswer(guess)
     }
 
 //    fun previousScreen(){
