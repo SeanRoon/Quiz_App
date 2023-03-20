@@ -66,11 +66,11 @@ class MainFragment : Fragment() {
                 Toast.makeText(activity, R.string.correct, Toast.LENGTH_SHORT).show()
                 mediaPlayer = MediaPlayer.create(context, R.raw.incorrectsound)
                 mediaPlayer.start()
-                viewModel.gameWon.observe(viewLifecycleOwner) {
-                    if (viewModel.checkIfGameWon()) {
-                        val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(viewModel.numOfIncorrect)
-                        findNavController().navigate(action)
-                    }
+//              viewModel.checkIfGameWon()
+                viewModel.gameWon.observe(viewLifecycleOwner) {}
+                if(viewModel.isGameWon) {
+                    val action = MainFragmentDirections.actionMainFragmentToGameWonFragment(viewModel.numOfIncorrect)
+                    findNavController().navigate(action)
                 }
             }
         }
