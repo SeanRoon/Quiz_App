@@ -22,11 +22,9 @@ class CheatFragment : Fragment() {
     ): View? {
         _binding = FragmentCheatBinding.inflate(inflater, container, false)
         val rootView = binding.root
-        val args = CheatFragmentArgs.fromBundle(requireArguments())
-        val correctAnswer = args.answer
         binding.showAnswerButton.setOnClickListener(){
-            binding.answerText.text = correctAnswer.toString()
-            setFragmentResult("REQUESTING_DID_CHEAT_KEY", bundleOf("DID_CHEAT_KEY" to true))
+            binding.answerText.text = viewModel.currentQuestionAnswer.toString()
+            viewModel.setCheatedStatusForCurrentQuestion(true)
         }
         setHasOptionsMenu(true)
         return rootView

@@ -23,10 +23,8 @@ class GameWonFragment : androidx.fragment.app.Fragment() {
     ): View? {
         _binding = FragmentGameWonBinding.inflate(inflater, container, false)
         val rootView = binding.root
-        val args = GameWonFragmentArgs.fromBundle(requireArguments())
         lateinit var mediaPlayer: MediaPlayer
-        val numOfIncorrect = args.numOfIncorrect
-        binding.numOfWrongTextView.text = "You had ${numOfIncorrect} wrong answers"
+        binding.numOfWrongTextView.text = "You had ${viewModel.numOfIncorrect} wrong answers"
         setHasOptionsMenu(true)
         mediaPlayer = MediaPlayer.create(context, R.raw.gamewon)
         mediaPlayer.setLooping(true)

@@ -12,18 +12,18 @@ class QuizViewModel: ViewModel() {
     val myList: List<Question> = listOf(Question(R.string.question1, false, false), Question(R.string.question2, true, false), Question(R.string.question3, false, false), Question(R.string.question4, false, false), Question(R.string.question5, false, false))
 
     //    figure out which on should be mutable
-    var _currentIndex = MutableLiveData(0)
+    private var _currentIndex = MutableLiveData(0)
     val currentIndex: LiveData<Int>
         get() = _currentIndex
-    var numOfIncorrect = 0
-        get() = numOfIncorrect
-    var numOfCorrect = 0
-        get() = numOfCorrect
-    var _gameWon = MutableLiveData(false)
+    private var _numOfIncorrect = 0
+    val numOfIncorrect: Int
+        get() = _numOfIncorrect
+    private var _numOfCorrect = 0
+    val numOfCorrect: Int
+        get() = _numOfCorrect
+    private var _gameWon = MutableLiveData(false)
     val gameWon: LiveData<Boolean>
-        get() = gameWon
-    lateinit var mediaPlayer: MediaPlayer
-
+        get() = _gameWon
 
     val currentQuestionAnswer: Boolean
         get() = myList[currentIndex.value ?: 0].answer
@@ -31,26 +31,33 @@ class QuizViewModel: ViewModel() {
         get() = myList[currentIndex.value ?: 0].resourceId
     val currentQuestionCheatStatus: Boolean
         get() = myList[currentIndex.value ?: 0].cheated
+    val isGameWon: Boolean
+        get() = ((gameWon.value ?: 0) as Boolean)
 
     fun setCheatedStatusForCurrentQuestion(cheated: Boolean){
         myList.get(currentIndex.value ?: 0).cheated = cheated
     }
     fun checkIfGameWon(){
-        _gameWon.value = numOfCorrect >= 3
+        _gameWon.value = numOfCorrect > 1
     }
     fun checkAnswer(guess: Boolean){
-        if(myList[currentIndex.value ?: 0].answer == guess){
+        if(myList[_currentIndex.value ?: 0].answer == guess){
             if(!(currentQuestionCheatStatus)){
-                numOfCorrect++
-                mediaPlayer = MediaPlayer.create(context, R.raw.correctsound)
-                mediaPlayer.start()
+                _numOfCorrect++
             }
         }
         else{
-            Toast.makeText(activity, R.string.incorrect, Toast.LENGTH_SHORT).show()
-            numOfIncorrect++
-            mediaPlayer = MediaPlayer.create(context, R.raw.incorrectsound)
-            mediaPlayer.start()
+            _numOfIncorrect++
         }
+        checkIfGameWon()
+    }
+    fun advanceScreen(){
+        if(currentIndex.value!! < myList.size - 1) {
+            _currentIndex.value = _currentIndex.value?.plus(1)
+        }
+        else{
+            _currentIndex.value = 0
+        }
+//        setCheatedStatusForCurrentQuestion(false)
     }
 }
